@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/headLogin :: head"></head>
+
+<body class="bg-dark">
+
+<div class="container">
+  <div class="row center">
+    <div class="col-md-4">
+      <div class="card bg-light w-100" style="width: 400px; min-width: 400px;">
+        <div class="card-header text-center">
+          <h1>SIA AMI Stock Master Portal</h1>
+        </div>
+        <div class="card-body">
+          <div th:if="${param.error}" class="alert alert-danger">Invalid username and password.</div>
+          <div th:if="${param.logout}" class="alert alert-success">You have been logged out.</div>
+          <form th:action="@{login}" method="post">
+            <div class="form-group">
+              <div class="input-group mb-3">
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" />
+              </div>
+
+              <div class="input-group mb-3">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" />
+              </div>
+              <div class="input-group text-center mb-3">
+              	<button type="submit" class="btn btn-primary"><span class="bi bi-box-arrow-in-right"></span> Login</button>
+            </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	<!-- <div class="container">
+		<div class="row center">
+			<div class="col-md-4">
+				<div class="card bg-light w-100"
+					style="width: 400px; min-width: 400px;">
+					<div class="card-header text-center">
+						<h1>Login</h1>
+					</div>
+					<div class="card-body">
+						<div th:if="${param.error}" class="alert alert-danger">
+							Invalid username and password.</div>
+						<div th:if="${param.logout}" class="alert alert-success">
+							You have been logged out.</div>
+						<form th:action="@{login}" method="post">
+							<div class="form-group">
+								<label for="username">Username:</label> <input type="text"
+									id="username" name="username" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="password">Password:</label> <input type="password"
+									id="password" name="password" class="form-control" />
+							</div>
+							<div class="form-group text-center">
+								<button type="submit" class="btn btn-primary"><span class="bi bi-box-arrow-in-right"></span> Login</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> -->
+</body>
+
+</html>

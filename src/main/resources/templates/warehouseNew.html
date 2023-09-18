@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body class="bg-dark">
+	<nav th:replace="fragments/nav :: nav"></nav>
+	<div class="container-fluid">
+		<div class="card bg-light">
+			<div class="card-header" th:if="${edit == null}">Create new warehouse</div>
+			<div class="card-header" th:if="${edit != null}">Update warehouse</div>
+			<div class="card-body">
+				<form th:object="${warehouse}" method="post">
+					<label>Name: <input type="text" th:field="*{name}" />
+					</label>
+					<br>
+					<button type="submit" th:if="${edit == null}">Create</button>
+					<button type="submit" th:if="${edit != null}">Update</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body class="bg-dark">
+	<nav th:replace="fragments/nav :: nav"></nav>
+	<div class="container-fluid">
+	<div class="card bg-light" style="min-height: 0px;">
+		<div class="card-body" th:text="${text}"></div>
+	</div>
+		<div class="card bg-light" style="min-height: 0px;">
+			<div th:if="${warehouse != null}" class="card-header">
+				List of shelves in warehouse <a th:text="${warehouse.name}"></a>
+				<a> | </a>
+				<a th:href="${contextPath != null ? contextPath + '/shelf-new/' + {warehouse.id} : 'shelf-new' + {warehouse.id}}">Create new shelf</a>
+			</div>
+			<div class="card-body">
+				<table class="table table-light table-hover" th:if="${warehouse != null}">
+					<tr>
+						<th>Shelf name</th>
+						<th>Product list</th>
+						
+					</tr>
+					<th:block th:each="shelf, index : ${warehouse.shelves}">
+					  <tr>
+					    <td th:text="${shelf.name}"></td>
+					    <td> 
+					    <th:block th:each="productExemplar : ${shelf.productExemplars}">
+					    	<a><strong th:text="${productExemplar.product.orderCode}"></strong></a>
+					    	<a th:text="' (' + ${productExemplar.product.shortDescription} + ')'"></a>
+					    	<br>
+					    </th:block>
+					    </td>
+					  </tr>
+					</th:block>
+				</table>
+			</div>
+		</div>
+		
+
+	</div>
+	<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+
+</html>

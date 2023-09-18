@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body class="bg-dark">
+	<nav th:replace="fragments/nav :: nav"></nav>
+	<div class="container-fluid">
+		<div class="card bg-light">
+			<div class="card-header">Create new shelf</div>
+			<div class="card-body">
+				<form th:object="${shelf}" method="post">
+					<label for="name">Type Name:</label>
+					<input type="text" id="name" th:field="*{name}" />
+					<br>
+					<label for="warehouse">Select Warehouse:</label>
+			        <select id="warehouse" name="warehouseId" th:attr="disabled=${warehouseId != null}">
+			        <option value="0">Select warehouse</option>
+			            <option th:each="warehouse : ${warehouses}" th:value="${warehouse.id}" th:text="${warehouse.name}" th:attr="selected=${warehouseId == warehouse.id}"></option>
+			        </select>
+					<br>
+					<button type="submit">Create</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>App Users</title>
+</head>
+<body>
+	<h1>App Users</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Username</th>
+				<th>Roles</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="appUser : ${appUsers}">
+				<td th:text="${appUser.id}"></td>
+				<td th:text="${appUser.firstName}"></td>
+				<td th:text="${appUser.lastName}"></td>
+				<td th:text="${appUser.username}"></td>
+				<td>
+					<ul>
+						<li th:each="role : ${appUser.roles}"><span
+							th:text="${role.roleName}"></span></li>
+					</ul>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

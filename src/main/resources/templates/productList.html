@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body class="bg-dark">
+	<nav th:replace="fragments/nav :: nav"></nav>
+	<div class="container-fluid">
+		<div class="card bg-light">
+			<div class="card-header d-flex justify-content-between align-items-center">
+				<div class="input-group">
+					<a th:href="${contextPath != null ? contextPath + '/product-new' : 'product-new'}" class="me-3">Create new product</a>
+					<span class="me-auto">List of products</span>
+				</div>
+				<form method="post">
+					<div class="input-group" style="max-width: 300px;">
+						<input type="text" name="keyword" class="form-control" placeholder="Search...">
+						<button class="btn btn-outline-secondary" type="submit">
+							<i class="bi bi-search"></i>
+						</button>
+					</div>
+				</form>
+			</div>
+
+			<div class="card-body">
+				<div th:if="${pageCount}==0">No Data</div>
+				<table class="table table-light table-hover" th:if="${pageCount}">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Manufacturer</th>
+							<th>Order Code</th>
+							<th>EAN code</th>
+							<th>UPC code</th>
+							<th>Short Description</th>
+							<th>Long Description</th>
+							<th colspan="2">Controls</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="product : ${products}" ><!-- class="clickable-row" th:data-href="@{testview/{id}(id=${test.id})}"  -->
+							<td th:text="${product.id}"></td>
+							<td th:text="${product.manufacturer != null ? product.manufacturer.name : ''}"></td>
+							<td th:text="${product.orderCode}"></td>
+							<td th:text="${product.eanCode}"></td>
+							<td th:text="${product.upcCode}"></td>
+							<td th:text="${product.shortDescription}"></td>
+							<td th:text="${product.longDescription}"></td>
+							<td><a class="btn btn-primary" th:href="@{product-edit-{id}(id=${product.id})}"><span class="bi bi-pencil"></span> Edit</a></td>
+							<td><a class="btn btn-danger" th:href="@{product-delete/{id}(id=${product.id})}"><span class="bi bi-trash"></span> Delete</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<nav>
+					<ul th:if="${pageCount}" class="pagination">
+						<li th:class="${page == 1} ? 'page-item disabled' : 'page-item'">
+							<a class="page-link" th:href="@{'?page=' + ${page - 1}}">
+								&laquo;Previous </a>
+						</li>
+						<li th:each="i : ${#numbers.sequence(1, pageCount)}"
+							th:class="${i == page} ? 'page-item active' : 'page-item'">
+							<a class="page-link" th:href="@{'?page=' + ${i}}">[[${i}]]</a>
+						</li>
+						<li
+							th:class="${page == pageCount} ? 'page-item disabled' : 'page-item'">
+							<a class="page-link" th:href="@{' ?page=' + ${page + 1}}">
+								Next&raquo; </a>
+						</li>
+					</ul>
+				</nav>
+
+				<script>
+				  $(document).ready(function() {
+				    $(".clickable-row").click(function() {
+				      window.location = $(this).data("href");
+				    });
+				  });
+				</script>
+				<!--<div>
+					<ul>
+						<li>  th:if="${currentPage > 0}"
+							<a th:href="@{/tests}(page=${currentPage - 1})">Previous</a>
+						</li>
+						<li th:each="i : ${#numbers.sequence(0, tests.totalPages - 1)}">
+							<a th:href="@{/tests}(page=${i})" th:classappend="${currentPage == i} ? active">${i}</a>
+						</li>
+						<li th:if="${currentPage < tests.totalPages - 1}">
+							<a th:href="@{/tests}(page=${currentPage + 1})">Next</a>
+						</li>
+					</ul>
+				</div> -->
+
+				<!-- <nav aria-label="Page navigation example">
+					<ul class="pagination">
+						<li th:class="${page == 1} ? 'page-item disabled' : 'page-item'">
+							<a class="page-link" th:href="@{'?page=' + ${page - 1}}">
+								&laquo; Previous </a>
+						</li>
+
+						<li th:each="i : ${#numbers.sequence(1, pageCount)}"
+							th:class="${i == page} ? 'page-item active' : 'page-item'"><a
+							class="page-link" th:href="@{'?page=' + ${i}}">[[${i}]]</a></li>
+						<li
+							th:class="${page == pageCount} ? 'page-item disabled' : 'page-item'">
+							<a class="page-link" th:href="@{' ?page=' + ${page + 1}}">
+								Next &raquo; </a>
+						</li>
+					</ul>
+				</nav> 
+				<div>
+					<span th:if="${tests.number > 0}"> <a
+						th:href="@{testlist?page=${tests.number - 1}}">Previous</a>
+					</span> <span th:if="${tests.hasNext}"> <a
+						th:href="@{testlist?page=${tests.number + 1}}">Next</a>
+					</span>
+				</div>-->
+			</div>
+		</div>
+	</div>
+	<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

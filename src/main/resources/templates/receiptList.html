@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+<body class="bg-dark">
+	<nav th:replace="fragments/nav :: nav"></nav>
+	<div class="container-fluid">
+		<div class="card bg-light">
+			<div class="card-header">
+				Čeku saraksts
+				<a>|</a>
+				<div class="dropdown">
+				    <a class="dropdown-toggle" href="#" role="button" id="uploadDropdown" data-bs-toggle="dropdown" aria-expanded="false">Augšupielādēt</a>
+				    <ul class="dropdown-menu" aria-labelledby="uploadDropdown">
+				      <li><a class="dropdown-item" href="upload-circlek-csv-semi">Circle K CSV (;)</a></li>
+				    </ul>
+				  </div>
+			</div>
+			<div class="card-body">
+				<table class="table table-striped table-light">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Pavadzīme</th>
+							<th>Čeks</th>
+							<th>Degviela</th>
+							<th>Daudzums</th>
+							<th>Cena</th>
+							<th>Datums / laiks</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="receipt : ${receipts}">
+							<td th:text="${receipt.id}"></td>
+							<td th:text="${receipt.invoice != null ? receipt.invoice.number : ''}"></td>
+							<td th:text="${receipt.number}"></td>
+							<td th:text="${receipt.fuel != null ? receipt.fuel.name : ''}"></td>
+							<td th:text="${receipt.volume}"></td>
+							<td th:text="${receipt.price}"></td>
+							<td th:text="${receipt.receiptDateTime}"></td>
+							
+							<!-- <td>
+								<ul>
+									<li th:if="${user.roles != null}"
+										th:each="role : ${user.roles}"><span
+										th:text="${role.roleName}"></span></li>
+								</ul>
+							</td> -->
+						</tr>
+					</tbody>
+				</table>
+				<nav>
+					<ul th:if="${pageCount}" class="pagination">
+						<li th:class="${page == 1} ? 'page-item disabled' : 'page-item'">
+							<a class="page-link" th:href="@{'?page=' + ${page - 1}}">
+								&laquo;Previous </a>
+						</li>
+						<li th:each="i : ${#numbers.sequence(1, pageCount)}"
+							th:class="${i == page} ? 'page-item active' : 'page-item'">
+							<a class="page-link" th:href="@{'?page=' + ${i}}">[[${i}]]</a>
+						</li>
+						<li
+							th:class="${page == pageCount} ? 'page-item disabled' : 'page-item'">
+							<a class="page-link" th:href="@{' ?page=' + ${page + 1}}">
+								Next&raquo; </a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

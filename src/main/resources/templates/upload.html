@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form method="POST" enctype="multipart/form-data"><!-- action="upload" --> 
+    <input type="file" name="file" accept=".csv, text/csv">
+    
+    <button type="submit">Augšupielādēt</button>
+    <div th:if="${errorMessage}" th:utext="${errorMessage}" class="error"></div>
+</form>
+
+</body>
+</html>

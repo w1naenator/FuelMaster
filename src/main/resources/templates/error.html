@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body class="bg-dark">
+	<nav th:replace="fragments/nav :: nav"></nav>
+	<div class="container-fluid">
+		<div class="card bg-light">
+			<div class="card-header">
+				<h1 th:text="${title}">Title</h1>
+			</div>
+			<div class="card-body">
+				<h3>Error</h3>
+				<div id="created" th:text="${#dates.format(timestamp)}"></div>
+				<div>
+					There was an unexpected error (type=<span th:text="${error}">Bad</span>,
+					status=<span th:text="${status}">500</span>).
+				</div>
+				<div th:text="${message}"></div>
+				<div>Please contact the operator with the above information.</div>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

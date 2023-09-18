@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body class="bg-dark">
+	<nav th:replace="fragments/nav :: nav"></nav>
+	<div class="container-fluid">
+		<div class="card bg-light">
+			<div class="card-header d-flex justify-content-between align-items-center">
+				<div class="input-group">
+					<a th:href="${contextPath != null ? contextPath + '/productexemplar-new' : 'product-new'}" class="me-3">Create new product</a>
+					<span class="me-auto">List of product exemplars</span>
+				</div>
+				<form method="post">
+					<div class="input-group" style="max-width: 300px;">
+						<input type="text" name="keyword" class="form-control" placeholder="Search...">
+						<button class="btn btn-outline-secondary" type="submit">
+							<i class="bi bi-search"></i>
+						</button>
+					</div>
+				</form>
+			</div>
+
+			<div class="card-body">
+				<div th:if="${pageCount}==0">No Data</div>
+				<table class="table table-light table-hover" th:if="${pageCount}">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Manufacturer</th>
+							<th>Order Code</th>
+							<th>Serial number</th>
+							<th colspan="2">Controls</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="productexemplar : ${productexemplarss}" ><!-- class="clickable-row" th:data-href="@{testview/{id}(id=${test.id})}"  -->
+							<td th:text="${productexemplar.id}"></td>
+							<td th:text="${productexemplar.product.manufacturer.name}"></td>
+							<td th:text="${productexemplar.product.orderCode}"></td>
+							<td th:text="${product.serialNumber}"></td>
+							<td><a class="btn btn-primary" th:href="@{productexemplar-edit/{id}(id=${productexemplar.id})}"><span class="bi bi-pencil"></span> Edit</a></td>
+							<td><a class="btn btn-danger" th:href="@{productexemplar-delete/{id}(id=${productexemplar.id})}"><span class="bi bi-trash"></span> Delete</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<nav>
+					<ul th:if="${pageCount}" class="pagination">
+						<li th:class="${page == 1} ? 'page-item disabled' : 'page-item'">
+							<a class="page-link" th:href="@{'?page=' + ${page - 1}}">
+								&laquo;Previous </a>
+						</li>
+						<li th:each="i : ${#numbers.sequence(1, pageCount)}"
+							th:class="${i == page} ? 'page-item active' : 'page-item'">
+							<a class="page-link" th:href="@{'?page=' + ${i}}">[[${i}]]</a>
+						</li>
+						<li
+							th:class="${page == pageCount} ? 'page-item disabled' : 'page-item'">
+							<a class="page-link" th:href="@{' ?page=' + ${page + 1}}">
+								Next&raquo; </a>
+						</li>
+					</ul>
+				</nav>
+
+				<script>
+				  $(document).ready(function() {
+				    $(".clickable-row").click(function() {
+				      window.location = $(this).data("href");
+				    });
+				  });
+				</script>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

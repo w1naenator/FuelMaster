@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body class="bg-dark">
+	<nav th:replace="fragments/nav :: nav"></nav>
+	<div class="container-fluid">
+		<div class="card bg-light">
+			<div class="card-header" th:if="${edit != null}">Update product</div>
+			<div class="card-header" th:if="${edit == null}">Create new product</div>
+			<div class="card-body">
+			
+				<form th:object="${product}" method="post">
+					<div class="mb-3">
+						<label for="id" th:if="${edit != null}" class="form-label">Id: *</label>
+						<input type="text" id="id" th:field="*{id}" th:readonly="${true}" th:if="${edit != null}" class="form-control" />
+					</div>
+		            <div>
+			            <label for="manufacturer">Manufacturer:</label>
+			            <div class="dropdown">
+					    <input type="text" id="manufacturer" required data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" name="manufacturer.name" value="" class="form-control">
+					    <input type="hidden" id="manufacturerId" name="manufacturer.id" value="">
+					    <ul class="dropdown-menu" aria-labelledby="manufacturer">
+					        <!-- Manufacturers will be dynamically populated here -->
+					    </ul>
+			            </div>
+			        </div>
+				    <div class="mb-3">
+						<label for="orderCode" class="form-label">Order Code: *</label>
+						<input type="text" id="orderCode" th:field="*{orderCode}" th:readonly="${edit != null}" class="form-control" />
+						<span th:if="${#fields.hasErrors('orderCode')}" th:errors="*{orderCode}" class="error  text-danger"></span> 
+					</div>
+					<div class="mb-3">
+						<label for="eanCode" class="form-label">EAN Code:</label>
+				        <input id="eanCode" type="text" th:field="*{eanCode}" class="form-control" />
+			        </div>
+			        <div class="mb-3">
+				        <label for="upcCode" class="form-label">UPC Code:</label>
+				        <input id="upcCode" type="text" th:field="*{upcCode}" class="form-control" />
+			        </div>
+			        <div class="mb-3">
+						<label for="shortDescription" class="form-label">Short Description:</label>
+						<textarea id="shortDescription" th:field="*{shortDescription}" rows="4" cols="50" class="form-control" ></textarea>
+					</div>
+					<div class="mb-3">
+						<label for="longDescription" class="form-label">Long Description:</label>
+						<textarea id="longDescription" th:field="*{longDescription}" rows="4" cols="50" class="form-control" ></textarea>
+					</div>
+					<div th:if="${#fields.hasGlobalErrors()}">
+			            <span th:each="globalError : ${#fields.globalErrors()}" th:errors="*{global}" class="global-error  text-danger"></span>
+			        </div>
+					<button th:if="${edit != null}" type="submit">Update</button>
+					<button th:if="${edit == null}" type="submit">Create</button>
+
+				</form>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+
+<script th:inline="javascript">
+
+$(document).ready(function() {
+    $("#manufacturer").on("input", function() {
+        var keyword = $(this).val();
+        if (keyword.length >= 1) {
+            $.ajax({
+                url: "manufacturers/search",
+                data: { "keyword": keyword },
+                success: function(data) {
+                    var dropdownMenu = $("#manufacturer").next(".dropdown-menu");
+                    dropdownMenu.empty();
+                    if (data.length > 0) {
+                        $.each(data, function(index, manufacturer) {
+                            var option = $("<li>").addClass("dropdown-item").attr("data-id", manufacturer.id).text(manufacturer.name);
+                            dropdownMenu.append(option);
+                        });
+                    } else {
+                        var option = $("<li>").addClass("dropdown-item disabled").text("No manufacturers found");
+                        dropdownMenu.append(option);
+                    }
+
+                    dropdownMenu.parent().addClass("show"); // Add the 'show' class to the parent dropdown div to make the dropdown visible
+                },
+                error: function() {
+                    console.log("Error occurred during manufacturer search.");
+                }
+            });
+        } else {
+            var dropdownMenu = $("#manufacturer").next(".dropdown-menu");
+            dropdownMenu.empty().parent().removeClass("show"); // Empty and hide the dropdown menu
+        }
+    });
+
+    $(".dropdown-menu").on("click", ".dropdown-item", function() {
+        var manufacturerId = $(this).data("id");
+        var manufacturerName = $(this).text();
+        $("#manufacturer").val(manufacturerName);
+        $("#manufacturerId").val(manufacturerId);
+    });
+});
+
+</script>
+
+
+
+    
+</html>

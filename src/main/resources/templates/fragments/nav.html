@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <a th:href="${contextPath != null ? contextPath + '/' : 'home'}" class="navbar-brand"><i class="me-2"></i>SIA AMI Stock Master Portal</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a th:href="${contextPath != null ? contextPath + '/receipt-list' : 'receipt-list'}" class="nav-link me-2"><i class="me-2"></i>Čeki</a></li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" th:utext="${loggedInUser != null ? '<span class=&quot;bi bi-person&quot;></span>&nbsp;' + loggedInUser.username + '&nbsp;' : 'No user logged in&nbsp;'}" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+				<a class="dropdown-item" th:href="${contextPath != null ? contextPath + '/user-list' : 'user-list'}"><span class="bi bi-person-badge"></span>&nbsp;User administration</a>
+				<a class="dropdown-item" th:href="${contextPath != null ? contextPath + '/logout' : 'logout'}"><span class="bi bi-box-arrow-right"></span>&nbsp;Logout</a>
+			</div>
+        </li>
+
+      </ul>
+    </div>
+</nav>
+
+</body>
+</html>
+
