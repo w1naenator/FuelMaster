@@ -1,12 +1,13 @@
-package lv.ami.fuelmaster.utils;
+package lv.ami.fuelmaster.service;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +16,20 @@ import org.springframework.web.multipart.MultipartFile;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
-import com.opencsv.exceptions.CsvValidationException;
 
 import lv.ami.fuelmaster.models.Fuel;
 import lv.ami.fuelmaster.models.Invoice;
 import lv.ami.fuelmaster.models.Receipt;
 import lv.ami.fuelmaster.repositories.FuelRepository;
 import lv.ami.fuelmaster.repositories.InvoiceRepository;
+import lv.ami.fuelmaster.repositories.InvoiceRepositoryImpl;
 import lv.ami.fuelmaster.repositories.ReceiptRepository;
 
 @Service
-public class ReceiptImportUtility {
-		@Autowired
+@Transactional
+public class ReceiptImportServiceImpl implements ReceiptImportService {
+	
+	@Autowired
 	private InvoiceRepository invoiceRepository;
 
 	@Autowired
@@ -39,26 +42,28 @@ public class ReceiptImportUtility {
 	private Receipt receipt = null;
 	private Boolean error = false;
 
+	@Override
 	public String getErrorMessage() {
 		return errorMessage;
 	}
 
-
+	@Override
 	public Boolean hasError() {
 		return error;
 	}
 
 
 
-
+	@Override
 	public void importCircleKSemicomCSV(MultipartFile file) {
 		try {
 			errorMessage = new String();
 			// Check file present
 			if (file.isEmpty()) {
-				errorMessage = "Nav izvēlēts fails.";
+				errorMessage += "Nav izvēlēts fails.";
 				error = true;
 			}
+			else errorMessage += "Fails ir.";
 
 			// Parse file
 			Reader reader = null;
@@ -149,22 +154,30 @@ public class ReceiptImportUtility {
 					
 					Invoice invoice = null;
 					try {
+						errorMessage += "Meklē pavadzīmi:";
 						invoice = invoiceRepository.findByNumber(invoiceNumber);
-						if (invoice == null) {
-							invoice = new Invoice();
-							invoice.setNumber(invoiceNumber);
-							invoiceRepository.save(invoice);
-						}
 					} catch (Exception e) {
-						errorMessage = "Pavadzīmju repozitorija kļūda: " + e.toString();
-						error = true;
-						break;
+						// TODO Auto-generated catch block
+						e = new Exception("Error: invoiceRepository.findByNumber(invoiceNumber) " + e.getMessage());
+						e.printStackTrace();
 					}
-					
-					
-					
-					
-					
+					if (invoice == null) {
+						errorMessage += "Neatrada:";
+						invoice = new Invoice();
+						invoice.setNumber(invoiceNumber);
+						try {
+							invoiceRepository.save(invoice);
+							errorMessage += "Izveido jaunu. ";
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							errorMessage += "Neizdevās izveidot jaunu. ";
+						}
+					}
+					else
+					{
+						errorMessage += "Atrada:";
+					}
 					
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 					LocalDateTime dateTime = LocalDateTime.parse(date, formatter);

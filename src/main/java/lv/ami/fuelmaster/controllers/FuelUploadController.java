@@ -11,10 +11,14 @@ import org.springframework.web.multipart.MultipartFile;
 import lv.ami.fuelmaster.repositories.FuelRepository;
 import lv.ami.fuelmaster.repositories.InvoiceRepository;
 import lv.ami.fuelmaster.repositories.ReceiptRepository;
-import lv.ami.fuelmaster.utils.ReceiptImportUtility;
+import lv.ami.fuelmaster.service.ReceiptImportService;
+import lv.ami.fuelmaster.service.ReceiptImportServiceImpl;
 
 @Controller
 public class FuelUploadController {
+	
+	@Autowired
+	ReceiptImportService receiptImportService;
 
 	/*@Autowired
 	private InvoiceRepository invoiceRepository;
@@ -115,10 +119,10 @@ public class FuelUploadController {
 		 * //return "upload"; // Redirect to a success page return
 		 * "redirect:receipt-list"; // Redirect to a success page } }
 		 */
-		ReceiptImportUtility receiptImportUtility = new ReceiptImportUtility();
-		receiptImportUtility.importCircleKSemicomCSV(file);
-		if (receiptImportUtility.hasError()) {
-			model.addAttribute("errorMessage", receiptImportUtility.getErrorMessage());
+		
+		receiptImportService.importCircleKSemicomCSV(file);
+		if (receiptImportService.hasError()) {
+			model.addAttribute("errorMessage", receiptImportService.getErrorMessage());
 			return "upload";
 		} else {
 			return "redirect:receipt-list";

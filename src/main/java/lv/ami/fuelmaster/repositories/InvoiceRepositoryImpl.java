@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import lv.ami.fuelmaster.models.Invoice;
-import lv.ami.fuelmaster.models.Product;
 
 @Repository
 @Transactional
@@ -34,10 +33,11 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 
 		cq.select(cb.count(cq.from(Invoice.class)));
-
-		return session.createQuery(cq).getSingleResult();
+		
+		return (long) session.createQuery(cq).getResultList().size();
 	}
 
+    @Override
     public void delete(Invoice entity) {
         Session session = sessionFactory.getCurrentSession();
         session.delete(entity);
@@ -50,14 +50,12 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 		session.delete(entity);
 	}
     
-
+    @Override
 	public List<Invoice> findAll() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("from Warehouse", Invoice.class).getResultList();
     }
 	
-	
-
     @Override
     public Page<Invoice> findAll(Pageable pageable) {
         CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
@@ -80,25 +78,41 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 	}
     
     @Override
-	public Invoice findByNumber(String number) {
-   	
-	        CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+	public Invoice findByNumber(String number) throws Exception{
+
+	       CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 	        CriteriaQuery<Invoice> query = builder.createQuery(Invoice.class);
 	        Root<Invoice> root = query.from(Invoice.class);
 
 	        Predicate predicate = builder.equal(root.get("number"), number);
 
 	        query.where(predicate);
-
-	        return sessionFactory.getCurrentSession().createQuery(query).uniqueResult();
+	        try {
+	        Invoice invoice = sessionFactory.getCurrentSession().createQuery(query).uniqueResult();
+	        
+	        return invoice;
+	        }
+	        catch(Exception e) {
+	        	 e = new Exception("kluda ir te: " + e.getMessage());
+	        	e.printStackTrace();
+	        	return null;
+	        }
 	    
 	}
 
     @Override
-	public Invoice save(Invoice entity) {
-        Session session = sessionFactory.getCurrentSession();
-        session.saveOrUpdate(entity);
-		return entity;
+	public Invoice save(Invoice entity)  throws Exception{
+        try{ 
+        	Session session = sessionFactory.getCurrentSession();
+        
+        	session.saveOrUpdate(entity);
+	        //session.save(entity);
+			return entity;
+		}
+        catch(Exception e) {
+			e = new Exception("kluda ir te: " + e.getMessage());
+			return null;
+		}
     }
 
 }

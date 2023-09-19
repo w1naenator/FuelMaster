@@ -94,11 +94,23 @@ public class FileUploadController {
 				String invoiceNumber = row.get(17);
 				String productID = row.get(18);
 
-				Invoice invoice = invoiceRepository.findByNumber(invoiceNumber);
+				Invoice invoice = null;
+				try {
+					invoice = invoiceRepository.findByNumber(invoiceNumber);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e = new Exception("Error: invoiceRepository.findByNumber(invoiceNumber) " + e.getMessage());
+					e.printStackTrace();
+				}
 				if (invoice == null) {
 					invoice = new Invoice();
 					invoice.setNumber(invoiceNumber);
-					invoiceRepository.save(invoice);
+					try {
+						invoiceRepository.save(invoice);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");

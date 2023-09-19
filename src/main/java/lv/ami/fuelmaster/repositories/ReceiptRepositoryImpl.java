@@ -10,6 +10,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Repository;
 
 import lv.ami.fuelmaster.models.Fuel;
 import lv.ami.fuelmaster.models.Invoice;
-import lv.ami.fuelmaster.models.Product;
 import lv.ami.fuelmaster.models.Receipt;
 
 @Repository
@@ -84,7 +84,8 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
     
     @Override
 	public List<Receipt> findByNumber(String number) {
-    	CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+    	
+    		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
         CriteriaQuery<Receipt> query = builder.createQuery(Receipt.class);
         Root<Receipt> root = query.from(Receipt.class);
 
@@ -93,6 +94,7 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
         query.where(predicate);
 
         return sessionFactory.getCurrentSession().createQuery(query).getResultList();
+    
 	}
     
     
@@ -116,8 +118,17 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
         );
 
         query.where(predicate);
-
-        return sessionFactory.getCurrentSession().createQuery(query).getSingleResult();
+        try {
+        Receipt receipt = sessionFactory.getCurrentSession().createQuery(query).getSingleResult();
+        
+        return receipt;
+        }
+        catch(Exception e) {
+        	 e = new Exception("kluda ir te: " + e.getMessage());
+        	e.printStackTrace();
+        	return null;
+        }
+        //return sessionFactory.getCurrentSession().createQuery(query).getSingleResult();
 	}
 
 }

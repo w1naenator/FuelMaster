@@ -1,7 +1,5 @@
 package lv.ami.fuelmaster.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,11 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lv.ami.fuelmaster.models.AppUser;
-import lv.ami.fuelmaster.models.Product;
 import lv.ami.fuelmaster.models.Receipt;
 import lv.ami.fuelmaster.repositories.ReceiptRepository;
-import lv.ami.fuelmaster.service.AppUserService;
+
 
 @Controller
 public class ReceiptListController extends AbstractBaseController {

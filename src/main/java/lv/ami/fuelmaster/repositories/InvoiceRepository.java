@@ -20,7 +20,7 @@ public interface InvoiceRepository {
 
 	public Invoice findById(Long id);
 	
-	public Invoice findByNumber(String number);
+	public Invoice findByNumber(String number) throws Exception;
 
-	public Invoice save(Invoice entity);
+	public Invoice save(Invoice entity)  throws Exception;
 }

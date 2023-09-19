@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<include
-		resource="org/springframework/boot/logging/logback/base.xml" />
-	<!-- logger name="lv.id.evil" level="DEBUG"/ -->
-	<logger name="org.springframework.security" level="DEBUG" />
+	
+	
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	<!-- <logger name="org.springframework.security" level="DEBUG" /> -->
+	<!-- <logger name="org.springframework.boot" level="DEBUG" /> -->
+	<!-- <logger name="com.mkyong" level="DEBUG"/> -->
+
+	<logger name="org.hibernate" level="DEBUG" />
+	<logger name="org.springframework" level="DEBUG" />
+	<logger name="lv.ami.fuelmaster" level="DEBUG" />
+	<!-- <logger name="org.springframework.web.servlet.mvc" level="INFO" /> -->
+
+
+
+
+
+
 </configuration>

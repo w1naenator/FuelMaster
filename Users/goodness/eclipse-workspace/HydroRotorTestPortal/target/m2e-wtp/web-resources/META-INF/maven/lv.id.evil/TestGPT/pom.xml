@@ -3,25 +3,27 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>FuelMaster</artifactId>
-	<groupId>lv.ami</groupId>
-	<name>FuelMaster</name>
-	<description>FuelMaster initial project</description>
+	<artifactId>TestGPT</artifactId>
+	<groupId>lv.id.evil</groupId>
+	<name>Hydrotest</name>
+	<description>Hydrotest initial project</description>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	
-
+	<url>http://evil.id.lv/testgpt</url>
+	<organization>
+		<name>evil id</name>
+		<url>http://evil.id.lv</url>
+	</organization>
 	<properties>
-		<warName>fuelmaster</warName>
-		<deployPath>/fuelmaster</deployPath>
 		<main.basedir>${basedir}/../..</main.basedir>
-		<server.tomcat.use-relative-redirects>true</server.tomcat.use-relative-redirects>
+
 		<java.version>1.8</java.version>
 		<mysql.version>8.0.27</mysql.version>
 		<spring.boot.version>2.7.9</spring.boot.version>
 		<spring.security.version>5.6.10</spring.security.version>
 		<hibernate.version>5.5.7.Final</hibernate.version>
 		<thymeleaf.version>3.1.1.RELEASE</thymeleaf.version>
+
 
 	</properties>
 
@@ -39,12 +41,6 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.mariadb.jdbc</groupId>
-			<artifactId>mariadb-java-client</artifactId>
-			<version>3.0.3</version>
 		</dependency>
 
 		<!-- Spring Boot Starter Data JPA -->
@@ -110,12 +106,6 @@
 			<version>${thymeleaf.version}</version>
 		</dependency>
 
-        <dependency>
-        <groupId>com.opencsv</groupId>
-        <artifactId>opencsv</artifactId>
-        <version>5.5.2</version>
-    </dependency>
-
 	</dependencies>
 
 	<build>
@@ -151,7 +141,7 @@
 							</includes>
 						</resource>
 					</webResources>
-					<warName>${warName}</warName>
+					<warName>testgpt</warName>
 				</configuration>
 			</plugin>
 
@@ -163,42 +153,36 @@
 
 			<plugin>
 				<groupId>org.codehaus.cargo</groupId>
-				<artifactId>cargo-maven3-plugin</artifactId>
+				<artifactId>cargo-maven2-plugin</artifactId>
 				<version>1.9.0</version>
 				<configuration>
-
 					<container>
 						<containerId>tomcat9x</containerId>
-						<type>remote</type>
+						<type>remote</type><!--<type>embedded</type> -->
 					</container>
-
-					<configuration>
-						<type>runtime</type>
-						<properties>
-							<cargo.hostname>localhost</cargo.hostname>
-							<cargo.protocol>http</cargo.protocol>
-							<cargo.servlet.port>80</cargo.servlet.port>
-							<cargo.remote.username>admin</cargo.remote.username>
-							<cargo.remote.password>adminadmin</cargo.remote.password>
-						</properties>
-					</configuration>
-
-					<deployer>
-						<type>remote</type>
-					</deployer>
-
 					<deployables>
 						<deployable>
 							<groupId>${project.groupId}</groupId>
 							<artifactId>${project.artifactId}</artifactId>
 							<type>war</type>
-							<location>${project.basedir}/target/${warName}.war</location>
 							<properties>
-						   		<context>${deployPath}</context>
-						    </properties>
+								<context>/testgpt</context>
+							</properties>
+							<location>${project.basedir}/target/testgpt.war</location>
 						</deployable>
+
 					</deployables>
-					
+					<configuration>
+
+						<type>runtime</type>
+						<properties>
+							<cargo.hostname>localhost</cargo.hostname>
+							<cargo.remote.username>admin</cargo.remote.username>
+							<cargo.remote.password>adminadmin</cargo.remote.password>
+							<!--<tomcat.manager.url>http://localhost/manager/text</tomcat.manager.url> -->
+							<cargo.remote.uri>http://localhost/manager/text</cargo.remote.uri>
+						</properties>
+					</configuration>
 				</configuration>
 			</plugin>
 		</plugins>

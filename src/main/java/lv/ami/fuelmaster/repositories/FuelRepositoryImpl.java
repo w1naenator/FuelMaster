@@ -89,7 +89,18 @@ public class FuelRepositoryImpl implements FuelRepository {
 
         query.where(predicate);
 
-        return sessionFactory.getCurrentSession().createQuery(query).uniqueResult();
+        
+        try {
+        Fuel fuel = sessionFactory.getCurrentSession().createQuery(query).uniqueResult();
+        
+        return fuel;
+        }
+        catch(Exception e) {
+        	 e = new Exception("kluda ir te: " + e.getMessage());
+        	e.printStackTrace();
+        	return null;
+        }
+        //return sessionFactory.getCurrentSession().createQuery(query).uniqueResult();
 	}
 
     @Override

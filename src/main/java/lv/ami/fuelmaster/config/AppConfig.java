@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
@@ -14,6 +15,10 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
+
+import ch.qos.logback.classic.*;
+
+import org.slf4j.LoggerFactory;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
@@ -108,6 +113,30 @@ public class AppConfig implements WebMvcConfigurer {
 		return resolver;
 	}
 
+   /* @Bean
+    public ConsoleHandler consoleHandler() {
+        ConsoleHandler consoleHandler = new ConsoleHandler();
+        // Set the desired logging level for the ConsoleHandler
+        //consoleHandler.setLevel(Level.INFO); 
+        consoleHandler.setLevel(Level.FINEST);
 
+        return consoleHandler;
+    }*/
+	
+    @Bean
+    @Profile("development")
+    public void configureDevelopmentLogging() {
+        // Configure logging for the "development" profile
+    	Logger rootLogger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+        rootLogger.setLevel(Level.DEBUG);
+    }
+
+    @Bean
+    @Profile("production")
+    public void configureProductionLogging() {
+        // Configure logging for the "production" profile
+    	Logger rootLogger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+        rootLogger.setLevel(Level.DEBUG);
+    }
 
 }
