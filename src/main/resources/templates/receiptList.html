@@ -6,21 +6,21 @@
 	<div class="container-fluid">
 		<div class="card bg-light">
 			<div class="card-header">
-				Čeku saraksts
+				<a>Čeku saraksts</a>
 				<a>|</a>
-				<div class="dropdown">
+				<div class="dropdown" style="display: inline;">
 				    <a class="dropdown-toggle" href="#" role="button" id="uploadDropdown" data-bs-toggle="dropdown" aria-expanded="false">Augšupielādēt</a>
 				    <ul class="dropdown-menu" aria-labelledby="uploadDropdown">
 				      <li><a class="dropdown-item" href="upload-circlek-csv-semi">Circle K CSV (;)</a></li>
+				      <li><a class="dropdown-item" href="upload-circlek-csv-comma">Circle K CSV (,)</a></li>
 				    </ul>
-				  </div>
+				</div>
 			</div>
 			<div class="card-body">
 				<nav>
 					<ul th:if="${pageCount}" class="pagination">
 						<li th:class="${page == 1} ? 'page-item disabled' : 'page-item'">
-							<a class="page-link" th:href="@{'?page=' + ${page - 1}}">
-								&laquo;Previous </a>
+							<a class="page-link" th:href="@{'?page=' + ${page - 1}}">◄</a>
 						</li>
 						<li th:each="i : ${#numbers.sequence(1, pageCount)}"
 							th:class="${i == page} ? 'page-item active' : 'page-item'">
@@ -28,8 +28,7 @@
 						</li>
 						<li
 							th:class="${page == pageCount} ? 'page-item disabled' : 'page-item'">
-							<a class="page-link" th:href="@{' ?page=' + ${page + 1}}">
-								Next&raquo; </a>
+							<a class="page-link" th:href="@{' ?page=' + ${page + 1}}">►</a>
 						</li>
 					</ul>
 				</nav>
