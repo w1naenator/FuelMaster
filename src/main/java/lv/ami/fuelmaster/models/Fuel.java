@@ -24,6 +24,14 @@ public class Fuel {
 	@ManyToMany(mappedBy = "fuelTypes")
 	List<Vehicle> vehicles = new ArrayList<Vehicle>();
 
+	public Fuel(){
+		
+	}
+	
+	public Fuel(String name){
+		this.name = name;
+	}
+	
 	public Long getId() {
 		return id;
 	}

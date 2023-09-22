@@ -25,6 +25,11 @@ public class PaymentCard {
     @JoinColumn(name = "default_vehicle_id")
 	private Vehicle defaultVehicle;
 
+	public PaymentCard(){}
+	
+	public PaymentCard(String name){
+		this.name = name;
+	}
 
 	public Long getId() {
 		return id;

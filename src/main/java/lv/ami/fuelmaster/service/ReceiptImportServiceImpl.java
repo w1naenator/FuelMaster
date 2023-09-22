@@ -246,9 +246,7 @@ public class ReceiptImportServiceImpl implements ReceiptImportService {
 						try {
 							fuel = fuelRepository.findByName("E95");
 							if (fuel == null) {
-								fuel = new Fuel();
-								fuel.setName("E95");
-								fuelRepository.save(fuel);
+								fuelRepository.save(new Fuel("E95"));
 							}
 						} catch (Exception e) {
 							errorMessage = "Degvielas repozitorija kļūda: " + e.toString();

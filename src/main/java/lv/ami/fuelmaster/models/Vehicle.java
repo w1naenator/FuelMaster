@@ -37,9 +37,8 @@ public class Vehicle {
     @JoinTable(name = "vehicle_fuel", joinColumns = @JoinColumn(name = "vehicle_id"), inverseJoinColumns = @JoinColumn(name = "fuel_id"))
 	private List<Fuel> fuelTypes = new ArrayList<>();
 	
-	@OneToOne
-	@JoinColumn(name = "default_vehicle_id", unique = true)
-	private Vehicle defaultVehicle;
+	@OneToOne(mappedBy = "defaultVehicle")
+	private PaymentCard paymentCard;
 	
 	
 	
@@ -69,13 +68,6 @@ public class Vehicle {
 		this.fuelTypes = fuelTypes;
 	}
 
-	public Vehicle getDefaultVehicle() {
-		return defaultVehicle;
-	}
-
-	public void setDefaultVehicle(Vehicle defaultVehicle) {
-		this.defaultVehicle = defaultVehicle;
-	}
 
 	public Float getConsumption() {
 		return consumption;
@@ -91,6 +83,14 @@ public class Vehicle {
 
 	public void setTankCapacity(Float tankCapacity) {
 		this.tankCapacity = tankCapacity;
+	}
+
+	public PaymentCard getPaymentCard() {
+		return paymentCard;
+	}
+
+	public void setPaymentCard(PaymentCard paymentCard) {
+		this.paymentCard = paymentCard;
 	}
 
 

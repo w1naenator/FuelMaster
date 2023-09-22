@@ -17,13 +17,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import lv.ami.fuelmaster.models.Fuel;
-import lv.ami.fuelmaster.models.Invoice;
+import lv.ami.fuelmaster.models.PaymentCard;
 import lv.ami.fuelmaster.models.Vehicle;
 
 @Repository
 @Transactional
-public class VehicleRepositoryImpl implements VehicleRepository {
+public class PaymentCardRepositoryImpl implements PaymentCardRepository {
 
    @Autowired
     private SessionFactory sessionFactory;
@@ -34,12 +33,12 @@ public class VehicleRepositoryImpl implements VehicleRepository {
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 
-		cq.select(cb.count(cq.from(Vehicle.class)));
+		cq.select(cb.count(cq.from(PaymentCard.class)));
 
 		return session.createQuery(cq).getSingleResult();
 	}
 
-    public void delete(Vehicle entity) {
+    public void delete(PaymentCard entity) {
         Session session = sessionFactory.getCurrentSession();
         session.delete(entity);
     }
@@ -47,57 +46,57 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     @Override
 	public void deleteById(Long id) {
 		Session session = sessionFactory.getCurrentSession();
-		Vehicle entity = session.find(Vehicle.class, id);
+		PaymentCard entity = session.find(PaymentCard.class, id);
 		session.delete(entity);
 	}
     
 
-	public List<Vehicle> findAll() {
+	public List<PaymentCard> findAll() {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from fuel", Vehicle.class).getResultList();
+        return session.createQuery("from fuel", PaymentCard.class).getResultList();
     }
 	
 	
 
     @Override
-    public Page<Vehicle> findAll(Pageable pageable) {
+    public Page<PaymentCard> findAll(Pageable pageable) {
         CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
-        CriteriaQuery<Vehicle> criteriaQuery = builder.createQuery(Vehicle.class);
-        Root<Vehicle> root = criteriaQuery.from(Vehicle.class);
+        CriteriaQuery<PaymentCard> criteriaQuery = builder.createQuery(PaymentCard.class);
+        Root<PaymentCard> root = criteriaQuery.from(PaymentCard.class);
         criteriaQuery.select(root);
         criteriaQuery.orderBy(builder.desc(root.get("id"))); 
-        TypedQuery<Vehicle> query = sessionFactory.getCurrentSession().createQuery(criteriaQuery);
+        TypedQuery<PaymentCard> query = sessionFactory.getCurrentSession().createQuery(criteriaQuery);
         int total = query.getResultList().size();
         query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
         query.setMaxResults(pageable.getPageSize());
-        List<Vehicle> entities = query.getResultList();
+        List<PaymentCard> entities = query.getResultList();
         return new PageImpl<>(entities, pageable, total);
     }
     
     @Override
-	public Vehicle findById(Long id) {
+	public PaymentCard findById(Long id) {
 		Session session = sessionFactory.getCurrentSession();
-		return session.get(Vehicle.class, id);
+		return session.get(PaymentCard.class, id);
 	}
     
     @Override
-	public Vehicle findByNumber(String number) {
+	public PaymentCard findByNumber(String name) {
     	CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
-        CriteriaQuery<Vehicle> query = builder.createQuery(Vehicle.class);
-        Root<Vehicle> root = query.from(Vehicle.class);
+        CriteriaQuery<PaymentCard> query = builder.createQuery(PaymentCard.class);
+        Root<PaymentCard> root = query.from(PaymentCard.class);
 
-        Predicate predicate = builder.equal(root.get("number"), number);
+        Predicate predicate = builder.equal(root.get("name"), name);
 
         query.where(predicate);
 
-        List<Vehicle> entities = sessionFactory.getCurrentSession().createQuery(query).getResultList();
+        List<PaymentCard> entities = sessionFactory.getCurrentSession().createQuery(query).getResultList();
         if (entities.isEmpty())return null;
         else return entities.get(0);
         
 	}
 
     @Override
-	public Vehicle save(Vehicle entity) {
+	public PaymentCard save(PaymentCard entity) {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(entity);
 		return entity;

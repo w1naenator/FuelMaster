@@ -11,8 +11,13 @@ import org.springframework.stereotype.Component;
 
 import lv.ami.fuelmaster.models.AppRole;
 import lv.ami.fuelmaster.models.AppUser;
+import lv.ami.fuelmaster.models.Fuel;
+import lv.ami.fuelmaster.models.PaymentCard;
+import lv.ami.fuelmaster.models.Vehicle;
 import lv.ami.fuelmaster.repositories.AppRoleRepository;
 import lv.ami.fuelmaster.repositories.AppUserRepository;
+import lv.ami.fuelmaster.repositories.FuelRepository;
+import lv.ami.fuelmaster.repositories.PaymentCardRepository;
 import lv.ami.fuelmaster.repositories.VehicleRepository;
 
 @Component
@@ -28,7 +33,15 @@ public class DefaultDataLoader implements ApplicationRunner {
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
+	private FuelRepository fuelRepository;
+	
+	@Autowired
+	private PaymentCardRepository paymentCardRepository;
+	
+	@Autowired
 	private VehicleRepository vehicleRepository;
+	
+	
 
 	public DefaultDataLoader(AppUserRepository appUserRepository) {
 		this.appUserRepository = appUserRepository;
@@ -53,21 +66,54 @@ public class DefaultDataLoader implements ApplicationRunner {
 			AppUser adminUser = new AppUser("admin", "admin", "admin", passwordEncoder.encode("admin"), adminRoles);
 			appUserRepository.save(adminUser);
 
-			// Create default user with user role
-			/*List<AppRole> userRoles = new ArrayList<AppRole>();// (Collections.singletonList(appRoleRepository.findByName("ROLE_USER")));
-			userRoles.add(appRoleRepository.findByName("ROLE_USER"));
-			AppUser regularUser = new AppUser("user", "user", "user", passwordEncoder.encode("user"), userRoles);
-			appUserRepository.save(regularUser);*/
 
-
-			//appUserRepository.save(new AppUser("user", "user", "user", passwordEncoder.encode("user"), new ArrayList<>()));
-			//AppUser regularUser = appUserRepository.findByUsername("user");
 			AppUser regularUser = new AppUser("user", "user", "user", passwordEncoder.encode("user"), new ArrayList<>());
 			regularUser.getRoles().add(appRoleRepository.findByName("ROLE_USER"));
 			appUserRepository.save(regularUser);
 		}
 		
+		if (fuelRepository.count() == 0) {
+			fuelRepository.save(new Fuel("LPG"));
+			fuelRepository.save(new Fuel("E95"));
+			fuelRepository.save(new Fuel("E98"));
+			fuelRepository.save(new Fuel("DIESEL"));
+		}
+		
+		if (paymentCardRepository.count() == 0) {
+			paymentCardRepository.save(new PaymentCard("1"));
+			paymentCardRepository.save(new PaymentCard("2"));
+			paymentCardRepository.save(new PaymentCard("3"));
+		}
+		
 		if (vehicleRepository.count() == 0) {
+			Vehicle vehicle = null;
+			List<Fuel> fuels = null;
+			
+			//LT4966
+			vehicle = new Vehicle();
+			vehicle.setNumber("LT4966");
+			vehicle.setTankCapacity(70.0f);
+			vehicle.setConsumption(16.0f);
+			vehicle.setPaymentCard(paymentCardRepository.findByNumber("1"));
+			fuels = new ArrayList<>();
+			fuels.add(fuelRepository.findByName("LPG"));
+			fuels.add(fuelRepository.findByName("E95"));
+			fuels.add(fuelRepository.findByName("E98"));
+			vehicle.setFuelTypes(fuels);
+			vehicleRepository.save(vehicle);
+			
+			//HJ6070
+			vehicle = new Vehicle();
+			vehicle.setNumber("HJ6070");
+			vehicle.setTankCapacity(55.0f);
+			vehicle.setConsumption(12.0f);
+			vehicle.setPaymentCard(paymentCardRepository.findByNumber("2"));
+			fuels = new ArrayList<>();
+			fuels.add(fuelRepository.findByName("LPG"));
+			fuels.add(fuelRepository.findByName("E95"));
+			fuels.add(fuelRepository.findByName("E98"));
+			vehicle.setFuelTypes(fuels);
+			vehicleRepository.save(vehicle);
 			
 		}
 	}
