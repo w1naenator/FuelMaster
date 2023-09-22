@@ -94,7 +94,7 @@ public class DefaultDataLoader implements ApplicationRunner {
 			vehicle.setNumber("LT4966");
 			vehicle.setTankCapacity(70.0f);
 			vehicle.setConsumption(16.0f);
-			vehicle.setPaymentCard(paymentCardRepository.findByNumber("1"));
+			vehicle.setPaymentCard(paymentCardRepository.findByName("1"));
 			fuels = new ArrayList<>();
 			fuels.add(fuelRepository.findByName("LPG"));
 			fuels.add(fuelRepository.findByName("E95"));
@@ -107,7 +107,7 @@ public class DefaultDataLoader implements ApplicationRunner {
 			vehicle.setNumber("HJ6070");
 			vehicle.setTankCapacity(55.0f);
 			vehicle.setConsumption(12.0f);
-			vehicle.setPaymentCard(paymentCardRepository.findByNumber("2"));
+			vehicle.setPaymentCard(paymentCardRepository.findByName("2"));
 			fuels = new ArrayList<>();
 			fuels.add(fuelRepository.findByName("LPG"));
 			fuels.add(fuelRepository.findByName("E95"));

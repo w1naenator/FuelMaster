@@ -80,7 +80,7 @@ public class PaymentCardRepositoryImpl implements PaymentCardRepository {
 	}
     
     @Override
-	public PaymentCard findByNumber(String name) {
+	public PaymentCard findByName(String name) {
     	CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
         CriteriaQuery<PaymentCard> query = builder.createQuery(PaymentCard.class);
         Root<PaymentCard> root = query.from(PaymentCard.class);

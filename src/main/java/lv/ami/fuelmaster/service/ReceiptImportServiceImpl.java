@@ -19,10 +19,13 @@ import com.opencsv.CSVReaderBuilder;
 
 import lv.ami.fuelmaster.models.Fuel;
 import lv.ami.fuelmaster.models.Invoice;
+import lv.ami.fuelmaster.models.PaymentCard;
 import lv.ami.fuelmaster.models.Receipt;
+import lv.ami.fuelmaster.models.Vehicle;
 import lv.ami.fuelmaster.repositories.FuelRepository;
 import lv.ami.fuelmaster.repositories.InvoiceRepository;
 import lv.ami.fuelmaster.repositories.InvoiceRepositoryImpl;
+import lv.ami.fuelmaster.repositories.PaymentCardRepository;
 import lv.ami.fuelmaster.repositories.ReceiptRepository;
 
 @Service
@@ -34,6 +37,9 @@ public class ReceiptImportServiceImpl implements ReceiptImportService {
 
 	@Autowired
 	private FuelRepository fuelRepository;
+	
+	@Autowired
+	private PaymentCardRepository paymentCardRepository;
 
 	@Autowired
 	private ReceiptRepository receiptRepository;
@@ -144,7 +150,7 @@ public class ReceiptImportServiceImpl implements ReceiptImportService {
 					 */
 					String date = row.get(0);
 					// String cardNumber = row.get(1);
-					// String cardTextLine2 = row.get(2);
+					 String cardTextLine2 = row.get(2);
 					// String driver = row.get(3);
 					// String vehicle = row.get(4);
 					String receiptNo = row.get(5);
@@ -161,6 +167,8 @@ public class ReceiptImportServiceImpl implements ReceiptImportService {
 					// String odometer = row.get(16);
 					String invoiceNumber = row.get(17);
 					String productID = row.get(18);
+					
+
 					
 					Invoice invoice = null;
 					try {
@@ -210,6 +218,10 @@ public class ReceiptImportServiceImpl implements ReceiptImportService {
 						break;
 					}
 					
+					PaymentCard paymentCard = paymentCardRepository.findByName(cardTextLine2);
+					Vehicle vehicle = null;
+					if (paymentCard != null) vehicle = paymentCard.getDefaultVehicle();
+					receipt.setUsedByVehicle(vehicle);
 					
 					Fuel fuel = null;
 					if (productID.equals("00010309")) {

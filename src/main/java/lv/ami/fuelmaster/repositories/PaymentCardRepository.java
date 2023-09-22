@@ -22,7 +22,7 @@ public interface PaymentCardRepository {
 
 	public PaymentCard findById(Long id);
 
-	public PaymentCard findByNumber(String name);
+	public PaymentCard findByName(String name);
 
 	public PaymentCard save(PaymentCard entity);
 }
