@@ -53,7 +53,7 @@ public class FuelRepositoryImpl implements FuelRepository {
 
 	public List<Fuel> findAll() {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from Warehouse", Fuel.class).getResultList();
+        return session.createQuery("from fuel", Fuel.class).getResultList();
     }
 	
 	

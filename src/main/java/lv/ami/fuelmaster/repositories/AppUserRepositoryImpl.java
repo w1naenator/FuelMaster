@@ -6,6 +6,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
@@ -29,7 +30,7 @@ public class AppUserRepositoryImpl implements AppUserRepository {
 	private SessionFactory sessionFactory;
 
 	@Override
-	public AppUser findByUsername(String username) {
+	/*public AppUser findByUsername(String username) {
 		Session session = sessionFactory.getCurrentSession();
 		String query = "SELECT u FROM AppUser u WHERE u.username = :username";
 		TypedQuery<AppUser> typedQuery = session.createQuery(query, AppUser.class);
@@ -39,6 +40,24 @@ public class AppUserRepositoryImpl implements AppUserRepository {
 		} catch (NoResultException e) {
 		    return null;
 		}
+	}*/
+	public AppUser findByUsername(String username) {
+	    CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+	    CriteriaQuery<AppUser> query = builder.createQuery(AppUser.class);
+	    Root<AppUser> root = query.from(AppUser.class);
+
+	    Predicate predicate = builder.equal(root.get("username"), username);
+	    query.where(predicate);
+
+	    TypedQuery<AppUser> typedQuery = sessionFactory.getCurrentSession().createQuery(query);
+
+	    List<AppUser> resultList = typedQuery.getResultList();
+
+	    if (resultList.isEmpty()) {
+	        return null;
+	    } else {
+	        return resultList.get(0);
+	    }
 	}
 
 	@Override
@@ -67,11 +86,19 @@ public class AppUserRepositoryImpl implements AppUserRepository {
 	}
 
 	@Override
-	public List<AppUser> findAll() {
+	/*public List<AppUser> findAll() {
 		Session session = sessionFactory.getCurrentSession();
 		TypedQuery<AppUser> query = session.createQuery("SELECT u FROM AppUser u", AppUser.class);
 		return query.getResultList();
+	}*/
+	public List<AppUser> findAll() {
+	    Session session = sessionFactory.getCurrentSession();
+	    CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+	    CriteriaQuery<AppUser> criteriaQuery = criteriaBuilder.createQuery(AppUser.class);
+	    Root<AppUser> root = criteriaQuery.from(AppUser.class);
+	    criteriaQuery.select(root);
 
+	    return session.createQuery(criteriaQuery).getResultList();
 	}
 
 	@Override

@@ -24,7 +24,9 @@ public interface ReceiptRepository {
 
 	public List<Receipt> findByNumber(String number);
 	
-	public Receipt findByNumberAndDate(String number, LocalDateTime localDateTime);
+	public Receipt findByNumberAndDate(String number, LocalDateTime localDateTime) throws Exception;
+	
+	public boolean existsByDateAndNumber(String number, LocalDateTime localDateTime) throws Exception;
 
 	public Receipt save(Receipt entity);
 }

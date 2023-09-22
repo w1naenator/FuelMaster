@@ -39,7 +39,6 @@ public class ReceiptImportServiceImpl implements ReceiptImportService {
 	private ReceiptRepository receiptRepository;
 	
 	private String errorMessage = new String();
-	private Receipt receipt = null;
 	private Boolean error = false;
 
 	@Override
@@ -56,32 +55,42 @@ public class ReceiptImportServiceImpl implements ReceiptImportService {
 
 	@Override
 	public void importCircleKSemicomCSV(MultipartFile file) {
-		try {
+		
 			errorMessage = new String();
+			error = false;
 			// Check file present
 			if (file.isEmpty()) {
-				errorMessage += "Nav izvēlēts fails.";
+				errorMessage += "Nav izvēlēts fails";
 				error = true;
 			}
-			else errorMessage += "Fails ir.";
+			else {
+				errorMessage += "Fails ir";
+			}
 
+			
 			// Parse file
 			Reader reader = null;
 			CSVReader csvReader = null;
 			if (!error) {
-
+				errorMessage += " -> Sāk faila apstrādi";
 				try {
 					reader = new InputStreamReader(file.getInputStream());
-					csvReader = new CSVReaderBuilder(reader)
-							.withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build();
+					csvReader = new CSVReaderBuilder(reader).withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build();
 					if (csvReader.peek() == null) {
-						errorMessage = "Failā nav datu.";
+						errorMessage += " -> Failā nav datu";
 						error = true;
 					}
+					else {
+						errorMessage += " -> Failā ir dati";
+					}
+					
 				} catch (Exception e) {
-					errorMessage = "Datu iegūšanas kļūda, pirmais etaps: " + e.toString();
+					errorMessage += " -> Datu iegūšanas kļūda, pirmais etaps: " + e.toString();
 					error = true;
 				}
+			}
+			else {
+				errorMessage += " -> Kļūda";
 			}
 
 			//
@@ -126,6 +135,7 @@ public class ReceiptImportServiceImpl implements ReceiptImportService {
 			}
 
 			if (!error) {
+				errorMessage += ", Faulā kļūdu nav ";
 				// Process the rows (columns and values) as needed
 				for (List<String> row : rows) {
 					/*
@@ -187,10 +197,6 @@ public class ReceiptImportServiceImpl implements ReceiptImportService {
 
 						if (receipt == null) {
 							receipt = new Receipt();
-						} else {
-							if (receipt.getReceiptDateTime().compareTo(dateTime) != 0) {
-								receipt = new Receipt();
-							}
 						}
 						receipt.setInvoice(invoice);
 						receipt.setNumber(receiptNo);
@@ -276,10 +282,6 @@ public class ReceiptImportServiceImpl implements ReceiptImportService {
 					}
 				}
 			}
-		} catch (Exception ex) {
-			errorMessage = "Kaut kāda kļūda: " + ex.toString();
-			error = true;
-		}
 	}
 
 }

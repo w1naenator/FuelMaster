@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -107,7 +108,7 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
     }
 
 	@Override
-	public Receipt findByNumberAndDate(String number, LocalDateTime localDateTime) {
+	public Receipt findByNumberAndDate(String number, LocalDateTime localDateTime)  throws Exception {
 		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
         CriteriaQuery<Receipt> query = builder.createQuery(Receipt.class);
         Root<Receipt> root = query.from(Receipt.class);
@@ -118,17 +119,33 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
         );
 
         query.where(predicate);
-        try {
-        Receipt receipt = sessionFactory.getCurrentSession().createQuery(query).getSingleResult();
-        
-        return receipt;
-        }
-        catch(Exception e) {
-        	 e = new Exception("kluda ir te: " + e.getMessage());
-        	e.printStackTrace();
-        	return null;
-        }
-        //return sessionFactory.getCurrentSession().createQuery(query).getSingleResult();
+        List<Receipt> receipts = sessionFactory.getCurrentSession().createQuery(query).getResultList();
+        if (receipts.isEmpty()) return null;
+        else return receipts.get(0);
 	}
+
+	@Override
+	public boolean existsByDateAndNumber(String number, LocalDateTime localDateTime) throws Exception {
+		 Session session = sessionFactory.getCurrentSession();
+	        CriteriaBuilder builder = session.getCriteriaBuilder();
+	        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+	        Root<Receipt> root = query.from(Receipt.class);
+
+	        // Define the criteria for the query
+	        query.select(builder.count(root));
+	        query.where(
+	            builder.equal(root.get("receiptDateTime"), localDateTime),
+	            builder.equal(root.get("number"), number)
+	        );
+
+	        // Execute the query
+	        Query<Long> typedQuery = session.createQuery(query);
+	        Long count = typedQuery.getSingleResult();
+
+	        // Check if a receipt with the specified date and number exists
+	        return count > 0;
+	}
+	
+	
 
 }
