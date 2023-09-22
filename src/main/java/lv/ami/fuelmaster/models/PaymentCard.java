@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -22,6 +24,7 @@ public class PaymentCard {
 	@ManyToOne
     @JoinColumn(name = "default_vehicle_id")
 	private Vehicle defaultVehicle;
+
 
 	public Long getId() {
 		return id;
@@ -46,7 +49,7 @@ public class PaymentCard {
 	public void setDefaultVehicle(Vehicle defaultVehicle) {
 		this.defaultVehicle = defaultVehicle;
 	}
-	
+
 	
 
 }

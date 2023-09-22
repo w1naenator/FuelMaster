@@ -13,18 +13,24 @@ import lv.ami.fuelmaster.models.AppRole;
 import lv.ami.fuelmaster.models.AppUser;
 import lv.ami.fuelmaster.repositories.AppRoleRepository;
 import lv.ami.fuelmaster.repositories.AppUserRepository;
+import lv.ami.fuelmaster.repositories.VehicleRepository;
 
 @Component
-public class DefaultUsersCreator implements ApplicationRunner {
+public class DefaultDataLoader implements ApplicationRunner {
 
 	@Autowired
 	private AppRoleRepository appRoleRepository;
+	
 	@Autowired
 	private AppUserRepository appUserRepository;
+	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private VehicleRepository vehicleRepository;
 
-	public DefaultUsersCreator(AppUserRepository appUserRepository) {
+	public DefaultDataLoader(AppUserRepository appUserRepository) {
 		this.appUserRepository = appUserRepository;
 	}
 
@@ -59,6 +65,10 @@ public class DefaultUsersCreator implements ApplicationRunner {
 			AppUser regularUser = new AppUser("user", "user", "user", passwordEncoder.encode("user"), new ArrayList<>());
 			regularUser.getRoles().add(appRoleRepository.findByName("ROLE_USER"));
 			appUserRepository.save(regularUser);
+		}
+		
+		if (vehicleRepository.count() == 0) {
+			
 		}
 	}
 }

@@ -38,6 +38,7 @@
 							<th>ID</th>
 							<th>Pavadzīme</th>
 							<th>Čeks</th>
+							<th>Automobilis</th>
 							<th>Degviela</th>
 							<th>Daudzums</th>
 							<th>Cena</th>
@@ -49,6 +50,7 @@
 							<td th:text="${receipt.id}"></td>
 							<td th:text="${receipt.invoice != null ? receipt.invoice.number : ''}"></td>
 							<td th:text="${receipt.number}"></td>
+							<td th:text="${receipt.usedByVehicle != null} ? receipt.usedByVehicle.number : ''"></td>
 							<td th:text="${receipt.fuel != null ? receipt.fuel.name : ''}"></td>
 							<td th:text="${receipt.volume}"></td>
 							<td th:text="${receipt.price}"></td>

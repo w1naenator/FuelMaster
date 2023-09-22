@@ -2,6 +2,7 @@ package lv.ami.fuelmaster.models;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -37,6 +39,10 @@ public class Receipt {
 	@ManyToOne
     @JoinColumn(name = "fuel_id")
 	private Fuel fuel;
+	
+	@ManyToOne
+    @JoinColumn(name = "vehicle_id")
+	private Vehicle usedByVehicle;
 
 	public Long getId() {
 		return id;
@@ -93,6 +99,16 @@ public class Receipt {
 	public void setFuel(Fuel fuel) {
 		this.fuel = fuel;
 	}
+
+	public Vehicle getUsedByVehicle() {
+		return usedByVehicle;
+	}
+
+	public void setUsedByVehicle(Vehicle usedByVehicle) {
+		this.usedByVehicle = usedByVehicle;
+	}
+	
+	
 	
 	
 }
