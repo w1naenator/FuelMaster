@@ -10,7 +10,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -20,8 +19,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import lv.ami.fuelmaster.models.Fuel;
-import lv.ami.fuelmaster.models.Invoice;
 import lv.ami.fuelmaster.models.Receipt;
 
 @Repository
@@ -55,9 +52,19 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
 	}
     
 
-	public List<Receipt> findAll() {
+    @Override
+	/*public List<Receipt> findAll() {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from Warehouse", Receipt.class).getResultList();
+        return session.createQuery("from receipts", Receipt.class).getResultList();
+    }*/
+    public List<Receipt> findAll() {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Receipt> criteriaQuery = builder.createQuery(Receipt.class);
+        Root<Receipt> root = criteriaQuery.from(Receipt.class);
+        criteriaQuery.select(root);
+
+        return session.createQuery(criteriaQuery).getResultList();
     }
 	
 	
@@ -86,7 +93,7 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
     @Override
 	public List<Receipt> findByNumber(String number) {
     	
-    		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+    	CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
         CriteriaQuery<Receipt> query = builder.createQuery(Receipt.class);
         Root<Receipt> root = query.from(Receipt.class);
 

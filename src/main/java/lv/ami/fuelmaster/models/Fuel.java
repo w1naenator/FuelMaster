@@ -12,7 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "fuel")
+@Table(name = "fuels")
 public class Fuel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class Fuel {
 	@Column(name = "name")
 	private String name;
 	
-	@ManyToMany(mappedBy = "fuelTypes")
+	@ManyToMany(mappedBy = "fuelTypes") // mappedBy should be in the owning side (Vehicle)
 	List<Vehicle> vehicles = new ArrayList<Vehicle>();
 
 	public Fuel(){

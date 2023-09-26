@@ -43,6 +43,7 @@
 							<th>Daudzums</th>
 							<th>Cena</th>
 							<th>Datums / laiks</th>
+							<th colspan="2">Kontrole</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -50,11 +51,15 @@
 							<td th:text="${receipt.id}"></td>
 							<td th:text="${receipt.invoice != null ? receipt.invoice.number : ''}"></td>
 							<td th:text="${receipt.number}"></td>
-							<td th:text="${receipt.usedByVehicle != null} ? receipt.usedByVehicle.number : ''"></td>
+							<td th:text="${receipt.usedByVehicle != null ? receipt.usedByVehicle.number : ''}"></td>
 							<td th:text="${receipt.fuel != null ? receipt.fuel.name : ''}"></td>
 							<td th:text="${receipt.volume}"></td>
 							<td th:text="${receipt.price}"></td>
 							<td th:text="${receipt.receiptDateTime}"></td>
+							<td>
+								<a class="btn btn-success" th:href="@{receipt-edit-{id}?page={pg}(id=${receipt.id},pg=${page})}">Rediģēt</a>
+								<a class="btn btn-danger" href="#" th:onclick="'deleteItem(\'' + ${receipt.id} + '\', \'' + @{receipt-delete-{id}?page={pg}(id=${receipt.id},pg=${page})} + '\')'">Dzēst</a>
+                        	</td>
 							
 							<!-- <td>
 								<ul>
@@ -72,4 +77,17 @@
 	</div>
 	<footer th:replace="fragments/footer :: footer"></footer>
 </body>
+
+
+
+ <script>
+     function deleteItem(itemId, deleteUrl) {
+         var confirmDelete = window.confirm("Tiešām izdzēst?");
+         if (confirmDelete) {
+        	 window.location.href = deleteUrl;
+         }
+     }
+ </script>
+
+
 </html>

@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "payment_card")
+@Table(name = "payment_cards")
 public class PaymentCard {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

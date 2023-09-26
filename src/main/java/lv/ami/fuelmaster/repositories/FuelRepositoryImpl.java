@@ -50,10 +50,22 @@ public class FuelRepositoryImpl implements FuelRepository {
 		session.delete(entity);
 	}
     
-
-	public List<Fuel> findAll() {
+    @Override
+	/*public List<Fuel> findAll() {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from fuel", Fuel.class).getResultList();
+        return session.createQuery("from fuels", Fuel.class).getResultList();
+    }*/
+    public List<Fuel> findAll() {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        
+        // Create a CriteriaQuery for Fuel entities
+        CriteriaQuery<Fuel> criteriaQuery = criteriaBuilder.createQuery(Fuel.class);
+        Root<Fuel> root = criteriaQuery.from(Fuel.class);
+        criteriaQuery.select(root);
+        
+        // Execute the query and return the result list
+        return session.createQuery(criteriaQuery).getResultList();
     }
 	
 	

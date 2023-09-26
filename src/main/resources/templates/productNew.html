@@ -14,16 +14,16 @@
 						<label for="id" th:if="${edit != null}" class="form-label">Id: *</label>
 						<input type="text" id="id" th:field="*{id}" th:readonly="${true}" th:if="${edit != null}" class="form-control" />
 					</div>
-		            <div>
-			            <label for="manufacturer">Manufacturer:</label>
-			            <div class="dropdown">
-					    <input type="text" id="manufacturer" required data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" name="manufacturer.name" value="" class="form-control">
-					    <input type="hidden" id="manufacturerId" name="manufacturer.id" value="">
-					    <ul class="dropdown-menu" aria-labelledby="manufacturer">
-					        <!-- Manufacturers will be dynamically populated here -->
-					    </ul>
-			            </div>
-			        </div>
+<div>
+    <label for="vehicle">Vehicle:</label>
+    <div class="dropdown">
+        <input type="text" id="vehicle" required data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" name="usedByVehicle.name" value="" class="form-control">
+        <input type="hidden" id="vehicleId" name="usedByVehicle.id" value="">
+        <ul class="dropdown-menu" aria-labelledby="vehicle">
+        </ul>
+    </div>
+</div>
+
 				    <div class="mb-3">
 						<label for="orderCode" class="form-label">Order Code: *</label>
 						<input type="text" id="orderCode" th:field="*{orderCode}" th:readonly="${edit != null}" class="form-control" />

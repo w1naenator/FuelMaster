@@ -51,10 +51,22 @@ public class VehicleRepositoryImpl implements VehicleRepository {
 		session.delete(entity);
 	}
     
-
-	public List<Vehicle> findAll() {
+    @Override
+	/*public List<Vehicle> findAll() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("from fuel", Vehicle.class).getResultList();
+    }*/
+    public List<Vehicle> findAll() {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        
+        // Create a CriteriaQuery for Vehicle entities
+        CriteriaQuery<Vehicle> criteriaQuery = criteriaBuilder.createQuery(Vehicle.class);
+        Root<Vehicle> root = criteriaQuery.from(Vehicle.class);
+        criteriaQuery.select(root);
+        
+        // Execute the query and return the result list
+        return session.createQuery(criteriaQuery).getResultList();
     }
 	
 	

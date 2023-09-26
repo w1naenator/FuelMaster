@@ -34,24 +34,6 @@ public class AppConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
 	}
 
-	/*
-	 * @Bean public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-	 * LocalContainerEntityManagerFactoryBean em = new
-	 * LocalContainerEntityManagerFactoryBean(); em.setDataSource(dataSource);
-	 * em.setPackagesToScan(new String[] { "lv.ami.fuelmaster" });
-	 *
-	 * // configure JpaVendorAdapter if needed // em.setJpaVendorAdapter(new
-	 * HibernateJpaVendorAdapter());
-	 *
-	 * return em; }
-	 *
-	 * @Bean public PlatformTransactionManager
-	 * transactionManager(EntityManagerFactory emf) { JpaTransactionManager
-	 * transactionManager = new JpaTransactionManager();
-	 * transactionManager.setEntityManagerFactory(emf);
-	 *
-	 * return transactionManager; }
-	 */
 
 	@Bean
 	public SpringTemplateEngine templateEngine() {
@@ -61,39 +43,7 @@ public class AppConfig implements WebMvcConfigurer {
 		return templateEngine;
 	}
 
-	@Bean
-	public ThymeleafViewResolver thymeleafViewResolver() {
-		ThymeleafViewResolver resolver = new ThymeleafViewResolver();
-		resolver.setTemplateEngine(templateEngine());
-		resolver.setCharacterEncoding("UTF-8");
 
-
-		return resolver;
-	}
-
-	@Bean
-	public ISpringTemplateEngine emailTemplateEngine() {
-		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-		templateEngine.setTemplateResolver(emailTemplateResolver());
-		templateEngine.setEnableSpringELCompiler(true);
-		return templateEngine;
-	}
-
-	@Bean
-	public ITemplateResolver emailTemplateResolver() {
-		final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-		templateResolver.setPrefix("templates/");
-		templateResolver.setSuffix(".html");
-		templateResolver.setTemplateMode(TemplateMode.HTML);
-		templateResolver.setCharacterEncoding("UTF-8");
-		templateResolver.setOrder(1);
-		templateResolver.setCheckExistence(true);
-
-		templateResolver.setCacheable(false);
-
-
-		return templateResolver;
-	}
 
 	@Bean
 	public SpringSecurityDialect springSecurityDialect() {
@@ -113,30 +63,6 @@ public class AppConfig implements WebMvcConfigurer {
 		return resolver;
 	}
 
-   /* @Bean
-    public ConsoleHandler consoleHandler() {
-        ConsoleHandler consoleHandler = new ConsoleHandler();
-        // Set the desired logging level for the ConsoleHandler
-        //consoleHandler.setLevel(Level.INFO); 
-        consoleHandler.setLevel(Level.FINEST);
 
-        return consoleHandler;
-    }*/
-	
-    @Bean
-    @Profile("development")
-    public void configureDevelopmentLogging() {
-        // Configure logging for the "development" profile
-    	Logger rootLogger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        rootLogger.setLevel(Level.DEBUG);
-    }
-
-    @Bean
-    @Profile("production")
-    public void configureProductionLogging() {
-        // Configure logging for the "production" profile
-    	Logger rootLogger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        rootLogger.setLevel(Level.DEBUG);
-    }
 
 }

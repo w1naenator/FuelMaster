@@ -79,11 +79,7 @@ public class DefaultDataLoader implements ApplicationRunner {
 			fuelRepository.save(new Fuel("DIESEL"));
 		}
 		
-		if (paymentCardRepository.count() == 0) {
-			paymentCardRepository.save(new PaymentCard("1"));
-			paymentCardRepository.save(new PaymentCard("2"));
-			paymentCardRepository.save(new PaymentCard("3"));
-		}
+
 		
 		if (vehicleRepository.count() == 0) {
 			Vehicle vehicle = null;
@@ -115,6 +111,19 @@ public class DefaultDataLoader implements ApplicationRunner {
 			vehicle.setFuelTypes(fuels);
 			vehicleRepository.save(vehicle);
 			
+		}	
+		
+		if (paymentCardRepository.count() == 0) {
+			PaymentCard paymentCard = null;
+			paymentCard = new PaymentCard("1");
+			paymentCard.setDefaultVehicle(vehicleRepository.findByNumber("LT4966"));
+			paymentCardRepository.save(paymentCard);
+			
+			paymentCard = new PaymentCard("2");
+			paymentCard.setDefaultVehicle(vehicleRepository.findByNumber("HJ6070"));
+			paymentCardRepository.save(paymentCard);
+			
+			paymentCardRepository.save(new PaymentCard("3"));
 		}
 	}
 }
