@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 import lv.ami.fuelmaster.models.AppRole;
 import lv.ami.fuelmaster.models.AppUser;
 import lv.ami.fuelmaster.models.Fuel;
+import lv.ami.fuelmaster.models.FuelTank;
 import lv.ami.fuelmaster.models.PaymentCard;
 import lv.ami.fuelmaster.models.Vehicle;
 import lv.ami.fuelmaster.repositories.AppRoleRepository;
 import lv.ami.fuelmaster.repositories.AppUserRepository;
 import lv.ami.fuelmaster.repositories.FuelRepository;
+import lv.ami.fuelmaster.repositories.FuelTankRepository;
 import lv.ami.fuelmaster.repositories.PaymentCardRepository;
 import lv.ami.fuelmaster.repositories.VehicleRepository;
 
@@ -40,6 +42,9 @@ public class DefaultDataLoader implements ApplicationRunner {
 	
 	@Autowired
 	private VehicleRepository vehicleRepository;
+	
+	@Autowired
+	private FuelTankRepository fuelTankRepository;
 	
 	
 
@@ -83,33 +88,72 @@ public class DefaultDataLoader implements ApplicationRunner {
 		
 		if (vehicleRepository.count() == 0) {
 			Vehicle vehicle = null;
-			List<Fuel> fuels = null;
+			
 			
 			//LT4966
 			vehicle = new Vehicle();
 			vehicle.setNumber("LT4966");
-			vehicle.setTankCapacity(70.0f);
-			vehicle.setConsumption(16.0f);
 			vehicle.setPaymentCard(paymentCardRepository.findByName("1"));
-			fuels = new ArrayList<>();
+			vehicleRepository.save(vehicle);
+			
+			//List of fuel tanks
+			
+			//Prepare tank 1
+			FuelTank fuelTank = new FuelTank();
+			fuelTank.setCapacity(55.0f);
+			fuelTank.setConsumption(16.0f);
+			List<Fuel> fuels = new ArrayList<>();
 			fuels.add(fuelRepository.findByName("LPG"));
+			fuelTank.setFuels(fuels);
+			fuelTank.setVehicle(vehicle);
+			fuelTankRepository.save(fuelTank);
+			
+			
+			
+			//Prepare tank 2
+			fuelTank = new FuelTank();
+			fuelTank.setCapacity(70.0f);
+			fuelTank.setConsumption(16.0f);
+			fuels = new ArrayList<>();
 			fuels.add(fuelRepository.findByName("E95"));
 			fuels.add(fuelRepository.findByName("E98"));
-			vehicle.setFuelTypes(fuels);
-			vehicleRepository.save(vehicle);
+			fuelTank.setFuels(fuels);
+			fuelTank.setVehicle(vehicle);
+			fuelTankRepository.save(fuelTank);
+			
+			
+			
 			
 			//HJ6070
 			vehicle = new Vehicle();
 			vehicle.setNumber("HJ6070");
-			vehicle.setTankCapacity(55.0f);
-			vehicle.setConsumption(12.0f);
-			vehicle.setPaymentCard(paymentCardRepository.findByName("2"));
+			vehicle.setPaymentCard(paymentCardRepository.findByName("1"));
+			vehicleRepository.save(vehicle);
+
+			
+			//Prepare tank 1
+			fuelTank = new FuelTank();
+			fuelTank.setCapacity(45.0f);
+			fuelTank.setConsumption(16.0f);
 			fuels = new ArrayList<>();
 			fuels.add(fuelRepository.findByName("LPG"));
+			fuelTank.setFuels(fuels);
+			fuelTank.setVehicle(vehicle);
+			fuelTankRepository.save(fuelTank);
+			
+			
+			//Prepare tank 2
+			fuelTank = new FuelTank();
+			fuelTank.setCapacity(60.0f);
+			fuelTank.setConsumption(16.0f);
+			fuels = new ArrayList<>();
 			fuels.add(fuelRepository.findByName("E95"));
 			fuels.add(fuelRepository.findByName("E98"));
-			vehicle.setFuelTypes(fuels);
-			vehicleRepository.save(vehicle);
+			fuelTank.setFuels(fuels);
+			fuelTank.setVehicle(vehicle);
+			fuelTankRepository.save(fuelTank);
+			
+			
 			
 		}	
 		

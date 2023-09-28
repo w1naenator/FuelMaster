@@ -26,16 +26,9 @@ public class Vehicle {
 
 	@Column(name = "number")
 	private String number;
-	
-	@Column(name = "consumption")
-	private Float consumption;
-	
-	@Column(name = "tank_capacity")
-	private Float tankCapacity;
 
-	@ManyToMany
-    @JoinTable(name = "vehicle_fuel", joinColumns = @JoinColumn(name = "vehicle_id"), inverseJoinColumns = @JoinColumn(name = "fuel_id"))
-	private List<Fuel> fuelTypes = new ArrayList<>();
+	@OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FuelTank> fuelTanks = new ArrayList<>();
 	
 	@OneToOne(mappedBy = "defaultVehicle")
 	private PaymentCard paymentCard;
@@ -60,29 +53,12 @@ public class Vehicle {
 		this.number = number;
 	}
 
-	public List<Fuel> getFuelTypes() {
-		return fuelTypes;
+	public List<FuelTank> getFuelTanks() {
+		return fuelTanks;
 	}
 
-	public void setFuelTypes(List<Fuel> fuelTypes) {
-		this.fuelTypes = fuelTypes;
-	}
-
-
-	public Float getConsumption() {
-		return consumption;
-	}
-
-	public void setConsumption(Float consumption) {
-		this.consumption = consumption;
-	}
-
-	public Float getTankCapacity() {
-		return tankCapacity;
-	}
-
-	public void setTankCapacity(Float tankCapacity) {
-		this.tankCapacity = tankCapacity;
+	public void setFuelTanks(List<FuelTank> fuelTanks) {
+		this.fuelTanks = fuelTanks;
 	}
 
 	public PaymentCard getPaymentCard() {

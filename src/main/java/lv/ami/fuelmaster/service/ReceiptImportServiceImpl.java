@@ -201,7 +201,7 @@ public class ReceiptImportServiceImpl implements ReceiptImportService {
 					LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
 					Receipt receipt = null;
 					try {
-						receipt = receiptRepository.findByNumberAndDate(receiptNo, dateTime);
+						receipt = receiptRepository.getByNumberAndDate(receiptNo, dateTime);
 
 						if (receipt == null) {
 							receipt = new Receipt();

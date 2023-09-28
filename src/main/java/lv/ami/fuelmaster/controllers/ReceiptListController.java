@@ -1,11 +1,15 @@
 package lv.ami.fuelmaster.controllers;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,19 +36,44 @@ public class ReceiptListController extends AbstractBaseController {
 	
 	/** LIST */
 	@GetMapping("/receipt-list")
-	public String listUsers(@RequestParam(defaultValue = "1") int page, Model model) {
+	public String listReceipts(@RequestParam(defaultValue = "1") int page, Model model) {
 		if (!isAuthenticated()) {
 			return getRedirectToLoginUrl();
 		}
 		int pageSize = 10;
 		Page<Receipt> receipts = receiptRepository.findAll(PageRequest.of(page - 1, pageSize));
-		Long totalShelves = receiptRepository.count();
-		Long pageCount = (long) Math.ceil((double) totalShelves / pageSize);
+		Long totalReceipts = receiptRepository.count();
+		Long pageCount = (long) Math.ceil((double) totalReceipts / pageSize);
 		model.addAttribute("receipts", receipts);
 		model.addAttribute("page", page);
 		model.addAttribute("pageCount", pageCount);
+		model.addAttribute("keyword", "");
+		//model.addAttribute("date", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		model.addAttribute("date", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM")));
 		return "receiptList";
 	}
+	
+    @PostMapping("/receipt-list")
+    public String findReceipts(Model model, @RequestParam(defaultValue = "1") int page,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "date", required = false) String dates) {
+    	//LocalDate date = LocalDate.parse(dates);
+    	LocalDate date = LocalDate.parse(dates + "-01");
+    	
+    	int pageSize = 10;
+		Page<Receipt> receipts = receiptRepository.findByNumberAndMonth(keyword, date, PageRequest.of(page - 1, pageSize));
+		Long totalReceipts = receipts.getTotalElements();
+		Long pageCount = (long) Math.ceil((double) totalReceipts / pageSize);
+    	
+		model.addAttribute("receipts", receipts);
+		model.addAttribute("page", page);
+		model.addAttribute("pageCount", pageCount);
+		model.addAttribute("keyword", keyword);
+		//model.addAttribute("date", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		model.addAttribute("date", date.format(DateTimeFormatter.ofPattern("yyyy-MM")));
+
+        return "receiptList";
+    }
 	
 	
 	

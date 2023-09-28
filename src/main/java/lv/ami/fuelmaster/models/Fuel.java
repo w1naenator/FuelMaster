@@ -3,12 +3,14 @@ package lv.ami.fuelmaster.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -21,8 +23,9 @@ public class Fuel {
 	@Column(name = "name")
 	private String name;
 	
-	@ManyToMany(mappedBy = "fuelTypes") // mappedBy should be in the owning side (Vehicle)
-	List<Vehicle> vehicles = new ArrayList<Vehicle>();
+	@ManyToMany(mappedBy = "fuels")
+    private List<FuelTank> fuelTanks = new ArrayList<>();
+
 
 	public Fuel(){
 		
@@ -48,13 +51,17 @@ public class Fuel {
 		this.name = name;
 	}
 
-	public List<Vehicle> getVehicles() {
-		return vehicles;
+	public List<FuelTank> getFuelTanks() {
+		return fuelTanks;
 	}
 
-	public void setVehicles(List<Vehicle> vehicles) {
-		this.vehicles = vehicles;
+	public void setFuelTanks(List<FuelTank> fuelTanks) {
+		this.fuelTanks = fuelTanks;
 	}
+
+
+
+
 	
 
 	
